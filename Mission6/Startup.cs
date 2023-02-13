@@ -26,7 +26,7 @@ namespace Mission6
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-
+            //Here lies the ability to connect to the database.
             services.AddDbContext<MovieAppContext>(options =>
             {
                 options.UseSqlite(Configuration["ConnectionStrings:MovieConnection"]);

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Mission6.Models
 {
+    //Here, we work with the models in terms of making them required or have other parameters as well.
     public class Movie
     {
         [Key]

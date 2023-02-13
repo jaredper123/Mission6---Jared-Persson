@@ -19,7 +19,7 @@ namespace Mission6.Models
         protected override void OnModelCreating(ModelBuilder mb)
         {
             mb.Entity<Movie>().HasData(
-
+                //These are all the seeds that we pas in to make it have some things already in the database.
                 new Movie
                 {
                     movieID = 1,
