@@ -6,6 +6,10 @@
     <title>@ViewData["Title"]</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    @*To make the validation work.*@
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 </head>
 @*Here is a common navbar across the entire website, just for ease of navigation.  It happens to  be the same one included in loading the project.*@
 <body>
@@ -13,9 +17,9 @@
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="MovieCollection">Movies</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="MovieCollection">Movie Entry</a>
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Podcasts">My Podcasts</a>
-                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="MovieView">Movie List</a>
             </div>
         </nav>
     </header>

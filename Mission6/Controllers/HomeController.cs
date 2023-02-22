@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Mission6.Models;
 using System;
@@ -11,36 +12,39 @@ namespace Mission6.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
         private MovieAppContext movContext { get; set; }
 
-        public HomeController(ILogger<HomeController> logger, MovieAppContext x)
+        public HomeController(MovieAppContext good)
         {
-            _logger = logger;
-            movContext = x;
+            movContext = good;
         }
 
         public IActionResult Index()
         {
             return View();
         }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
+        //Making the record
         [HttpGet]
         public IActionResult MovieCollection()
         {
+            ViewBag.stuff = movContext.categories.ToList();
             return View();
         }
 
         [HttpPost]
         public IActionResult MovieCollection(Movie entry)
         {
-            movContext.Add(entry);
-            movContext.SaveChanges();
+            if (ModelState.IsValid)
+            {
+                movContext.Add(entry);
+                movContext.SaveChanges();
+            }
+            else
+            {
+                ViewBag.stuff = movContext.categories.ToList();
+
+                return View(entry);
+            }
 
             return View("Thanks");
         }
@@ -49,16 +53,52 @@ namespace Mission6.Controllers
         {
             return View();
         }
-
+        //redirect
         public IActionResult Thanks()
         {
             return View();
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        public IActionResult MovieView()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            var movies = movContext.Movies
+                .Include(x => x.Category)
+                .OrderBy(x => x.Category)
+                .ToList();
+
+            return View(movies);
+        }
+        //Edit instance
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            ViewBag.stuff = movContext.categories.ToList();
+
+            var mov = movContext.Movies.Single( x => x.movieID == id);
+
+            return View("MovieCollection", mov);
+        }
+        //All of this is intended to separate out when information is given versus not.  They all return views and redirect to places based on what the user does.
+        [HttpPost]
+        public IActionResult Edit(Movie edits)
+        {
+            movContext.Update(edits);
+            movContext.SaveChanges();
+            return RedirectToAction("MovieView");
+        }
+        [HttpGet]
+        //Delete Instance
+        public IActionResult Delete(int movid)
+        {
+            var moovie = movContext.Movies.Single(x => x.movieID == movid);
+            return View(moovie);
+        }
+        [HttpPost]
+        public IActionResult Delete(Movie badone)
+        {
+            movContext.Movies.Remove(badone);
+            movContext.SaveChanges();
+            return RedirectToAction("MovieView");
         }
     }
 }

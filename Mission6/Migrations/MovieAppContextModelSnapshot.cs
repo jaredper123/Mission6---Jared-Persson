@@ -15,15 +15,70 @@ namespace Mission6.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.1.32");
 
+            modelBuilder.Entity("Mission6.Models.Category", b =>
+                {
+                    b.Property<int>("CategoryID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("CategoryName")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("CategoryID");
+
+                    b.ToTable("categories");
+
+                    b.HasData(
+                        new
+                        {
+                            CategoryID = 1,
+                            CategoryName = "Action/Adventure"
+                        },
+                        new
+                        {
+                            CategoryID = 2,
+                            CategoryName = "Comedy"
+                        },
+                        new
+                        {
+                            CategoryID = 3,
+                            CategoryName = "Drama"
+                        },
+                        new
+                        {
+                            CategoryID = 4,
+                            CategoryName = "Family"
+                        },
+                        new
+                        {
+                            CategoryID = 5,
+                            CategoryName = "Horror/Suspense"
+                        },
+                        new
+                        {
+                            CategoryID = 6,
+                            CategoryName = "Miscellaneous"
+                        },
+                        new
+                        {
+                            CategoryID = 7,
+                            CategoryName = "TV"
+                        },
+                        new
+                        {
+                            CategoryID = 8,
+                            CategoryName = "VHS"
+                        });
+                });
+
             modelBuilder.Entity("Mission6.Models.Movie", b =>
                 {
                     b.Property<int>("movieID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Category")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                    b.Property<int>("CategoryID")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Director")
                         .IsRequired()
@@ -52,13 +107,15 @@ namespace Mission6.Migrations
 
                     b.HasKey("movieID");
 
+                    b.HasIndex("CategoryID");
+
                     b.ToTable("Movies");
 
                     b.HasData(
                         new
                         {
                             movieID = 1,
-                            Category = "Family",
+                            CategoryID = 4,
                             Director = "Jennifer Yuh Nelson",
                             Edited = false,
                             LentTo = "Charlie",
@@ -70,7 +127,7 @@ namespace Mission6.Migrations
                         new
                         {
                             movieID = 2,
-                            Category = "Comedy",
+                            CategoryID = 2,
                             Director = "Sean Anders",
                             Edited = false,
                             LentTo = "Hugh",
@@ -82,7 +139,7 @@ namespace Mission6.Migrations
                         new
                         {
                             movieID = 3,
-                            Category = "Action/Adventure",
+                            CategoryID = 1,
                             Director = "Ridley Scott",
                             Edited = false,
                             LentTo = "Sarah",
@@ -91,6 +148,15 @@ namespace Mission6.Migrations
                             Title = "The Martian",
                             Year = 2015
                         });
+                });
+
+            modelBuilder.Entity("Mission6.Models.Movie", b =>
+                {
+                    b.HasOne("Mission6.Models.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
